@@ -95,11 +95,17 @@ function rangeSearch() {
 
 // * A query which returns all artists who appear within the top 5000 more than once
 function multiSearch() {
-  console.log('Multisearch.....')
-  initialPrompts()
+  connection.query(
+    'SELECT artist, count(*) as countNum FROM top5000 GROUP BY artist HAVING countNum > 1 ORDER BY countNum DESC',
+    (err, results) => {
+      if (err) throw err
+      console.table(results)
+      initialPrompts()
+    }
+  )
 }
 
 function songSearch() {
-  console.log('Searching song...')
+  
   initialPrompts()
 }
