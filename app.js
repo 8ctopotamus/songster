@@ -67,15 +67,35 @@ function artistSearch() {
   })
 }
 
+// * A query which returns all data contained within a specific range
+function rangeSearch() {
+  inquirer.prompt([
+    {
+      name: 'beginning',
+      type: 'number',
+      message: "Starting position?"
+    },
+    {
+      name: 'end',
+      type: 'number',
+      message: "Ending position?"
+    }
+  ]).then(answers => {
+    connection.query(
+      'SELECT position, artist, song, year FROM top5000 WHERE position BETWEEN ? AND ?', 
+      [answers.beginning, answers.end],
+      (err, results) => {
+        if (err) throw err
+        console.table(results)
+        initialPrompts()
+      }
+    )
+  })  
+}
+
 // * A query which returns all artists who appear within the top 5000 more than once
 function multiSearch() {
   console.log('Multisearch.....')
-  initialPrompts()
-}
-
-// * A query which returns all data contained within a specific range
-function rangeSearch() {
-  console.log('Reach search...')
   initialPrompts()
 }
 
