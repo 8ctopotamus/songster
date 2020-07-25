@@ -73,7 +73,7 @@ function rangeSearch() {
     {
       name: 'beginning',
       type: 'number',
-      message: "Starting position?"
+      message: "Starting position?",
     },
     {
       name: 'end',
@@ -106,6 +106,18 @@ function multiSearch() {
 }
 
 function songSearch() {
-  
-  initialPrompts()
+  inquirer.prompt([
+    {
+      message: 'Which song do are you looking for?',
+      name: 'song',
+    }
+  ]).then(answer => {
+    connection.query('SELECT position, artist, song, year FROM top5000 WHERE ?', {
+      song: answer.song
+    }, (err, results) => {
+      if (err) throw err
+      console.table(results)
+      initialPrompts()
+    })
+  })
 }
